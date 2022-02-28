@@ -41,59 +41,89 @@ function App() {
   }, [dateFilter]);
 
   return (
-    <div className="App">
-      <nav>
-        <p className="uppercase">Physicians</p>
+    <div className="container-fluid">
+      <div className="row">
+        <nav
+          id="sidebar"
+          className="col-md-2 d-none d-md-block bg-light sidebar pt-3"
+        >
+          <div className="sidebar-sticky">
+            <ul className="nav flex-column">
+              <p className="uppercase bold">Physicians</p>
+              {doctors.map((doctor) => (
+                <li key={doctor.id} className="nav-item">
+                  <a
+                    className="nav-link"
+                    href="#"
+                  >{`${doctor.lastName}, ${doctor.firstName}`}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-        <ul>
-          {doctors.map((doctor) => (
-            <li key={doctor.id}>{`${doctor.lastName}, ${doctor.firstName}`}</li>
-          ))}
-        </ul>
+          <div className="text-center">
+            <Button variant="primary">Log Out</Button>
+          </div>
+        </nav>
 
-        <Button variant="primary">Log Out</Button>
-      </nav>
+        <main className="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+          <h1>
+            {selectedDoctor &&
+              `Dr. ${selectedDoctor.firstName} ${selectedDoctor.lastName}`}
+          </h1>
+          <p>{selectedDoctor?.email}</p>
+          <Form.Control
+            id="date-filter"
+            type="date"
+            value={dateFilter}
+            onChange={(event) => setDateFilter(event.target.value)}
+          />
 
-      <main>
-        <h1>
-          {selectedDoctor &&
-            `Dr. ${selectedDoctor.firstName} ${selectedDoctor.lastName}`}
-        </h1>
-        <p>{selectedDoctor?.email}</p>
-        <Form>
-          <Form.Group>
-            <Form.Control
-              type="date"
-              value={dateFilter}
-              onChange={(event) => setDateFilter(event.target.value)}
-            />
-          </Form.Group>
-        </Form>
-
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Time</th>
-              <th>Kind</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {appointments.map((appointment) => (
-              <tr key={appointment.id}>
-                <td>{appointment.id}</td>
-                <td>{`${appointment.patientFirstName} ${appointment.patientLastName}`}</td>
-                <td>{new Date(appointment.dateTime).toLocaleTimeString()}</td>
-                <td>{appointment.appointmentKind.description}</td>
-                <td>x</td>
+          <Table striped bordered hover>
+            <thead className="table-dark">
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Time</th>
+                <th>Kind</th>
+                <th></th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
-      </main>
+            </thead>
+
+            <tbody>
+              {appointments.map((appointment) => (
+                <tr key={appointment.id}>
+                  <td>{appointment.id}</td>
+                  <td>{`${appointment.patientFirstName} ${appointment.patientLastName}`}</td>
+                  <td>{new Date(appointment.dateTime).toLocaleTimeString()}</td>
+                  <td>{appointment.appointmentKind.description}</td>
+                  <td className="text-center">
+                    <a href="#">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        className="bi bi-x-lg"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"
+                        />
+                        <path
+                          fill-rule="evenodd"
+                          d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"
+                        />
+                      </svg>
+                    </a>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </main>
+      </div>
     </div>
   );
 }
