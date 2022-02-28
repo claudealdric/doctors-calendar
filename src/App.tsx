@@ -27,18 +27,25 @@ function App() {
 
       const firstDoctor = doctors[0];
       setSelectedDoctor(firstDoctor);
-
-      const { data: appointments } = await axios.get<Appointment[]>(
-        `${apiBaseUrl}/doctors/appointments`,
-        {
-          params: { doctorId: firstDoctor.id, dateTime: dateFilter },
-        }
-      );
-      setAppointments(appointments);
     };
 
     fetchData();
-  }, [dateFilter]);
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (selectedDoctor) {
+        const { data: appointments } = await axios.get<Appointment[]>(
+          `${apiBaseUrl}/doctors/appointments`,
+          {
+            params: { doctorId: selectedDoctor.id, dateTime: dateFilter },
+          }
+        );
+        setAppointments(appointments);
+      }
+    };
+    fetchData();
+  }, [dateFilter, selectedDoctor]);
 
   return (
     <div className="container-fluid">
@@ -55,6 +62,7 @@ function App() {
                   <a
                     className="nav-link"
                     href="#"
+                    onClick={() => setSelectedDoctor(doctor)}
                   >{`${doctor.lastName}, ${doctor.firstName}`}</a>
                 </li>
               ))}
@@ -108,11 +116,11 @@ function App() {
                         viewBox="0 0 16 16"
                       >
                         <path
-                          fill-rule="evenodd"
+                          fillRule="evenodd"
                           d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"
                         />
                         <path
-                          fill-rule="evenodd"
+                          fillRule="evenodd"
                           d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"
                         />
                       </svg>
