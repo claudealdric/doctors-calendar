@@ -47,6 +47,13 @@ function App() {
     fetchData();
   }, [dateFilter, selectedDoctor]);
 
+  const deleteAppointment = async (id: number) => {
+    await axios.delete(`${apiBaseUrl}/doctors/appointments/${id}`);
+    setAppointments(
+      [...appointments].filter((appointment) => appointment.id !== id)
+    );
+  };
+
   return (
     <div className="container-fluid">
       <div className="row">
@@ -106,7 +113,10 @@ function App() {
                   <td>{new Date(appointment.dateTime).toLocaleTimeString()}</td>
                   <td>{appointment.appointmentKind.description}</td>
                   <td className="text-center">
-                    <a href="#">
+                    <a
+                      href="#"
+                      onClick={() => deleteAppointment(appointment.id)}
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="16"
