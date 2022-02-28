@@ -97,7 +97,7 @@ function App() {
           <Table striped bordered hover>
             <thead className="table-dark">
               <tr>
-                <th>ID</th>
+                <th>#</th>
                 <th>Name</th>
                 <th>Time</th>
                 <th>Kind</th>
@@ -106,9 +106,9 @@ function App() {
             </thead>
 
             <tbody>
-              {appointments.map((appointment) => (
+              {appointments.map((appointment, index) => (
                 <tr key={appointment.id}>
-                  <td>{appointment.id}</td>
+                  <td>{index + 1}</td>
                   <td>{`${appointment.patientFirstName} ${appointment.patientLastName}`}</td>
                   <td>{new Date(appointment.dateTime).toLocaleTimeString()}</td>
                   <td>{appointment.appointmentKind.description}</td>
